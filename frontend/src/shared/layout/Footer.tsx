@@ -20,7 +20,7 @@ export default function Footer() {
                             <span className="text-xl font-bold text-slate-900 dark:text-white">SkillSync</span>
                         </div>
                         <p className="text-slate-500 dark:text-slate-400 text-sm mb-6 max-w-xs leading-relaxed">
-                            One platform for your career, learning, and finding great talent.
+                            One Stop Solution For Your Career.
                         </p>
                         {/* Social media icons */}
                         <div className="flex gap-4">
@@ -79,7 +79,7 @@ export default function Footer() {
 
                 {/* Simple copyright line at the very bottom */}
                 <div className="border-t border-slate-100 dark:border-slate-800 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-                    <p className="text-xs text-slate-500">© 2024 SkillSync AI Inc. All rights reserved.</p>
+                    <p className="text-xs text-slate-500">© 2026 SkillSync AI Inc. All rights reserved.</p>
                     <div className="flex items-center gap-6">
                         <button className="text-xs text-slate-500 flex items-center gap-1">
                             <span className="material-symbols-outlined text-sm">language</span>

@@ -30,8 +30,8 @@ export default function Navbar() {
                         <span className="text-xl font-bold tracking-tight text-slate-900 dark:text-white">SkillSync</span>
                     </Link>
                     <nav className="hidden md:flex items-center gap-6">
-                        <Link href="#" className="text-sm font-medium hover:text-primary transition-colors">Candidates</Link>
-                        <Link href="#" className="text-sm font-medium hover:text-primary transition-colors">Companies</Link>
+                        <Link href="#" className="text-sm font-medium hover:text-primary transition-colors">Jobs</Link>
+                        <Link href="#" className="text-sm font-medium hover:text-primary transition-colors">Courses</Link>
                         <Link href="#" className="text-sm font-medium hover:text-primary transition-colors">Recruiters</Link>
                         <Link href="#" className="text-sm font-medium hover:text-primary transition-colors">Institutes</Link>
                     </nav>
@@ -45,17 +45,6 @@ export default function Navbar() {
                         <span className="material-symbols-outlined">search</span>
                     </button>
 
-                    {/* 'Post a Job' button for tablets and bigger screens */}
-                    <Link
-                        href="#"
-                        className="hidden sm:block text-sm font-semibold px-4 py-2 text-primary border border-primary hover:bg-primary/5 rounded-lg transition-colors mr-2"
-                    >
-                        Post a Job
-                    </Link>
-
-                    <button className="text-sm font-semibold px-4 py-2 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg">
-                        Log in
-                    </button>
 
                     <button className="text-sm font-semibold px-5 py-2.5 bg-primary text-white hover:bg-primary/90 rounded-lg shadow-sm">
                         Get Started
