@@ -7,13 +7,7 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      colors: {
-        primary: "rgb(var(--color-primary) / <alpha-value>)",
-        background: "rgb(var(--color-bg) / <alpha-value>)",
-        text: "rgb(var(--color-text) / <alpha-value>)",
-        muted: "rgb(var(--color-muted) / <alpha-value>)",
-        border: "rgb(var(--color-border) / <alpha-value>)",
-      },
+      extend: {},
     },
   },
   plugins: [],

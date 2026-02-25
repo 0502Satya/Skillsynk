@@ -1,34 +1,67 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+/* This tells Tailwind CSS to start here */
+@import "tailwindcss";
 
-/* ===========================
-   DESIGN TOKENS
-=========================== */
+/* 
+  This block sets up the brand colors and settings. 
+  It replaces the old tailwind.config.ts file for color settings.
+*/
+@theme {
+  /* These are the main colors used in the app */
+  --color-primary: #135bec;
+  --color-accent: #f97316;
+  --color-bg: #f6f6f8;
+  --color-surface: #ffffff;
+  --color-text: #0f172a;
+  --color-muted: #64748b;
+  --color-border: #e2e8f0;
 
-:root {
-  --color-primary: 59 130 246;        /* Blue-500 */
-  --color-bg: 255 255 255;           /* White */
-  --color-text: 17 24 39;            /* Gray-900 */
-  --color-muted: 107 114 128;        /* Gray-500 */
-  --color-border: 229 231 235;       /* Gray-200 */
+  /* This sets the main font to 'Inter' */
+  --font-display: "Inter", "sans-serif";
+
+  /* A slow, smooth bounce animation for floating elements */
+  --animate-bounce-subtle: bounce-subtle 4s ease-in-out infinite;
+
+  @keyframes bounce-subtle {
+
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+
+    50% {
+      transform: translateY(-8px);
+    }
+  }
 }
 
-/* Dark mode overrides */
-.dark {
-  --color-primary: 99 102 241;        /* Indigo-500 */
-  --color-bg: 17 24 39;               /* Gray-900 */
-  --color-text: 243 244 246;          /* Gray-100 */
-  --color-muted: 156 163 175;         /* Gray-400 */
-  --color-border: 55 65 81;           /* Gray-700 */
-}
+/* 
+  Settings for Dark Mode. 
+  It works when the HTML has a 'dark' class.
+*/
+@variant dark (&:where(.dark, .dark *));
 
-/* ===========================
-   Global styles
-=========================== */
+@layer base {
 
-body {
-  background-color: rgb(var(--color-bg));
-  color: rgb(var(--color-text));
-  transition: background-color 0.3s ease, color 0.3s ease;
+  /* These colors are used when the user switches to Dark Mode */
+  .dark {
+    --color-bg: #101622;
+    --color-surface: #101622;
+    --color-text: #f1f5f9;
+    --color-muted: #94a3b8;
+    --color-border: #1e293b;
+  }
+
+  /* Basic settings for the whole page */
+  body {
+    background-color: var(--color-bg);
+    color: var(--color-text);
+    font-family: var(--font-display);
+    transition: background-color 0.3s ease, color 0.3s ease;
+    @apply antialiased;
+  }
+
+  /* Settings for Google Icons to make them look nice */
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+  }
 }
