@@ -60,7 +60,7 @@
     @apply antialiased;
   }
 
-  /* Settings for Google Icons to make them look nice */
+  /* Settings for Google Icons to make them look nice and better */
   .material-symbols-outlined {
     font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
   }
