@@ -1,3 +1,6 @@
+"use client";
+
+import React from "react";
 import Link from "next/link";
 import { Button } from "@/shared/ui";
 import ThemeToggle from "@/shared/ui/ThemeToggle";
@@ -37,20 +40,104 @@ export default function Navbar() {
                     </nav>
                 </div>
 
-                {/* Right side: Search, Theme switch, and Login buttons */}
-                <div className="flex items-center gap-4">
+                {/* Right side: Actions */}
+                <div className="flex items-center gap-3">
                     <ThemeToggle />
-                    {/* Search button for big screens */}
-                    <button className="hidden lg:flex items-center text-slate-500 hover:text-primary px-3 py-2">
+                    
+                    {/* Search button */}
+                    <button className="hidden sm:flex items-center text-slate-500 hover:text-primary p-2 transition-colors">
                         <span className="material-symbols-outlined">search</span>
                     </button>
 
-
-                    <button className="text-sm font-semibold px-5 py-2.5 bg-primary text-white hover:bg-primary/90 rounded-lg shadow-sm">
-                        Get Started
-                    </button>
+                    {/* Authentication Section */}
+                    <div className="flex items-center gap-2 border-l border-slate-200 dark:border-slate-800 pl-4 ml-2">
+                        <AuthActions />
+                        
+                        <div className="h-6 w-px bg-slate-200 dark:border-slate-800 mx-2 hidden lg:block"></div>
+                        
+                        {/* Employer Dropdown */}
+                        <EmployerDropdown />
+                    </div>
                 </div>
             </div>
         </header>
+    );
+}
+
+/**
+ * Split Login/Register or Dashboard button.
+ */
+function AuthActions() {
+    const [isLoggedIn, setIsLoggedIn] = React.useState(false);
+
+    React.useEffect(() => {
+        setIsLoggedIn(document.cookie.includes('skillsync_session=true'));
+    }, []);
+
+    if (isLoggedIn) {
+        return (
+            <Link href="/dashboard" className="text-sm font-bold px-4 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:opacity-90 rounded-full shadow-sm transition-all flex items-center gap-2">
+                <span className="material-symbols-outlined text-lg">dashboard</span>
+                Dashboard
+            </Link>
+        );
+    }
+
+    return (
+        <div className="flex items-center gap-2">
+            <Link 
+                href="/auth/signin" 
+                className="text-sm font-bold px-5 py-2 border-2 border-primary text-primary hover:bg-primary/5 rounded-full transition-all"
+            >
+                Login
+            </Link>
+            <Link 
+                href="/auth/signup" 
+                className="text-sm font-bold px-5 py-2 bg-[#ff5a3d] text-white hover:opacity-90 rounded-full shadow-md shadow-orange-500/20 transition-all border-2 border-[#ff5a3d]"
+            >
+                Register
+            </Link>
+        </div>
+    );
+}
+
+/**
+ * Dropdown for recruiter and company portals.
+ */
+function EmployerDropdown() {
+    const [isOpen, setIsOpen] = React.useState(false);
+
+    return (
+        <div className="relative" onMouseEnter={() => setIsOpen(true)} onMouseLeave={() => setIsOpen(false)}>
+            <button className="flex items-center gap-1 text-sm font-bold text-slate-700 dark:text-slate-200 hover:text-primary transition-colors py-2 group">
+                For employers
+                <span className={`material-symbols-outlined text-lg transition-transform duration-300 ${isOpen ? 'rotate-180' : ''}`}>
+                    expand_more
+                </span>
+            </button>
+
+            {/* Dropdown Menu */}
+            {isOpen && (
+                <div className="absolute right-0 top-full pt-2 w-56 animate-in fade-in slide-in-from-top-2 duration-200 z-[100]">
+                    <div className="bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl shadow-2xl p-2 overflow-hidden">
+                        <Link 
+                            href="http://recruiter.localhost:3000/auth/signin"
+                            className="flex flex-col gap-0.5 p-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group"
+                        >
+                            <span className="text-sm font-bold group-hover:text-primary transition-colors">Recruiter Portal</span>
+                            <span className="text-[10px] text-slate-500">Find and vet top talent quickly.</span>
+                        </Link>
+                        <Link 
+                            href="http://company.localhost:3000/auth/signin"
+                            className="flex flex-col gap-0.5 p-3 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-colors group border-t border-slate-100 dark:border-slate-800/50"
+                        >
+                            <span className="text-sm font-bold group-hover:text-primary transition-colors">Company Login</span>
+                            <span className="text-[10px] text-slate-500">Manage your organization's hiring.</span>
+                        </Link>
+
+                    </div>
+                </div>
+            )}
+        </div>
     );
 }
