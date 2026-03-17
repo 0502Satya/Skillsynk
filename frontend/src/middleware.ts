@@ -10,8 +10,8 @@ export function middleware(request: NextRequest) {
   const host = request.headers.get('host') || '';
   const pathname = url.pathname;
 
-  // Mock session check - looks for a 'skillsync_session' cookie
-  const isLoggedIn = request.cookies.has('skillsync_session');
+  // Mock session check - looks for a 'jwt_access' cookie
+  const isLoggedIn = request.cookies.has('jwt_access') || request.cookies.has('skillsync_session');
 
   // List of paths that don't need a login (Auth pages)
   const isAuthPage = pathname.startsWith('/auth/signin') || 
@@ -69,6 +69,12 @@ export function middleware(request: NextRequest) {
   }
 
   // 4. Main Domain fallback (Candidates/Marketing)
+  // If logged in and on an auth page, redirect to dashboard
+  if (isMainDomain && isLoggedIn && isAuthPage) {
+    url.pathname = '/dashboard';
+    return NextResponse.redirect(url);
+  }
+
   return NextResponse.next();
 }
 

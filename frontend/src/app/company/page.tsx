@@ -1,13 +1,30 @@
 "use client";
 
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { getCompanyProfileAction } from "@/features/auth/actions";
 
 /**
  * Specialized Dashboard for Companies.
  * Action-oriented landing page for newly registered or logged-in companies.
  */
 export default function CompanyDashboardPage() {
+  const [profile, setProfile] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchProfile() {
+      const data = await getCompanyProfileAction();
+      if (!data.error) {
+        setProfile(data);
+      }
+      setLoading(false);
+    }
+    fetchProfile();
+  }, []);
+
+  const isProfileIncomplete = profile && (!profile.description || !profile.industry || !profile.website);
+
   return (
     <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors">
       
@@ -25,16 +42,43 @@ export default function CompanyDashboardPage() {
           <button className="p-2 text-slate-500 hover:text-primary transition-colors">
             <span className="material-symbols-outlined">notifications</span>
           </button>
-          <div className="size-10 bg-primary rounded-full flex items-center justify-center text-white font-bold">JD</div>
+          <div className="size-10 bg-primary rounded-full flex items-center justify-center text-white font-bold">
+            {profile?.name ? profile.name.substring(0, 2).toUpperCase() : "CO"}
+          </div>
         </div>
       </header>
 
-      <main className="p-6 md:p-12 max-w-7xl mx-auto space-y-12">
+      <main className="p-6 md:p-12 max-w-7xl mx-auto space-y-8">
         
+        {/* Profile Completion Banner */}
+        {isProfileIncomplete && (
+          <div className="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800/50 p-6 rounded-[1.5rem] flex flex-col md:flex-row items-center justify-between gap-6 animate-in slide-in-from-top-4 duration-500">
+            <div className="flex items-start gap-4 text-center md:text-left">
+              <div className="size-12 rounded-2xl bg-amber-100 dark:bg-amber-800 flex items-center justify-center shrink-0">
+                <span className="material-symbols-outlined text-amber-600 dark:text-amber-400">new_releases</span>
+              </div>
+              <div className="space-y-1">
+                <h4 className="font-black text-amber-900 dark:text-amber-200">Finish setting up your profile</h4>
+                <p className="text-sm text-amber-700 dark:text-amber-400 font-medium max-w-lg">
+                  Companies with complete profiles see 3x higher candidate engagement. Add your description, website, and industry to get verified.
+                </p>
+              </div>
+            </div>
+            <Link 
+              href="/company/settings/organization" 
+              className="bg-amber-600 text-white px-6 py-3 rounded-xl font-bold text-sm shadow-lg shadow-amber-600/20 hover:bg-amber-700 transition-all whitespace-nowrap active:scale-[0.98]"
+            >
+              Complete Profile
+            </Link>
+          </div>
+        )}
+
         {/* Welcome Hero */}
         <section className="bg-primary rounded-[2rem] p-8 md:p-16 text-white relative overflow-hidden shadow-2xl shadow-primary/20">
           <div className="relative z-10 space-y-4">
-            <h1 className="text-4xl md:text-5xl font-black tracking-tight">Welcome back, <span className="underline decoration-primary-light">Dataminerz</span>!</h1>
+            <h1 className="text-4xl md:text-5xl font-black tracking-tight">
+              Welcome{profile?.name ? `, ${profile.name}` : " back"}!
+            </h1>
             <p className="text-primary-light text-lg max-w-xl opacity-90">
               Your talent intelligence dashboard is ready. You have 3 active job postings and 14 new candidate matches.
             </p>
