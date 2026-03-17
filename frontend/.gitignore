@@ -39,3 +39,15 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+# Python
+__pycache__/
+*.pyc
+
+# Env files
+.env
+.env.*
+!.env.template
+!.env.example
+
+# Django / general
+db.sqlite3
