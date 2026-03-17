@@ -10,8 +10,15 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # Load environment variables from .env file
 load_dotenv(BASE_DIR / '.env')
 
+# Helper for mandatory environment variables
+def get_env(name):
+    value = os.environ.get(name)
+    if not value:
+        raise Exception(f"{name} is missing in environment variables. Please check your .env file.")
+    return value
+
 # SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-=37*@gnz_2&4v_=m9@iiiz_8*y(r3qs0b@sn(q^98t1(q@vl#9')
+SECRET_KEY = get_env('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = os.environ.get('DEBUG', 'True') == 'True'
@@ -68,10 +75,9 @@ TEMPLATES = [
 WSGI_APPLICATION = 'core.wsgi.application'
 
 # Database configuration using Neon (via DATABASE_URL in .env)
-# Falls back to sqlite if DATABASE_URL is not set
 DATABASES = {
     'default': dj_database_url.config(
-        default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
+        default=get_env('DATABASE_URL'),
         conn_max_age=600,
         conn_health_checks=True,
     )
