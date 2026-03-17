@@ -7,22 +7,100 @@
 # OS files
 .DS_Store
 Thumbs.db
+desktop.ini
 
-# Python
+# Python / General
 __pycache__/
-*.pyc
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+ENV/
+*.venv
+env.bak/
+venv.bak/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
 
-# Env
-.env
-.env.*
-!.env.template
-!.env.example
-
-# Django
-db.sqlite3
-
-# Node (frontend)
+# Node / Next.js (frontend)
 node_modules/
 .next/
-/out/
-/build
+out/
+build/
+.vercel
+*.tsbuildinfo
+next-env.d.ts
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+/.pnp
+.pnp.*
+.yarn/*
+!.yarn/patches
+!.yarn/plugins
+!.yarn/releases
+!.yarn/versions
+
+# Environment & Sensitive
+.env*
+!.env.template
+!.env.example
+*.pem
+
+# Django / Backend
+db.sqlite3
+db.sqlite3-journal
+media/
+static/
+staticfiles/
+local_settings.py
+celerybeat-schedule
+celerybeat.pid
+backend/api_error.html
+backend/api_error_v2.html
+
+# Special Directories (Ignore contents, keep folder)
+database/*
+!database/.gitkeep
+storage/*
+!storage/.gitkeep
+worker/*
+!worker/.gitkeep
+
+# Other tools
+.spyderproject
+.spyproject
+.ropeproject
+/site
+.mypy_cache/
+.dmypy.json
+dmypy.json
+.pyre/
+.pytype/
+cython_debug/
+.ipynb_checkpoints
+profile_default/
+ipython_config.py
+.pdm-plugins/
+.pdm-python/
+__pypackages__/
+*.mo
+*.pot
+htmlcov/
+.tox/
+.nox/
+.coverage
+.coverage.*
+.cache
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.hypothesis/
+.pytest_cache/
+cover/
