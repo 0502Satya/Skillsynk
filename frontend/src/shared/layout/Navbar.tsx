@@ -71,15 +71,29 @@ function AuthActions() {
     const [isLoggedIn, setIsLoggedIn] = React.useState(false);
 
     React.useEffect(() => {
-        setIsLoggedIn(document.cookie.includes('skillsync_session=true'));
+        // Check for session cookie manually for now
+        // This non-HttpOnly cookie is set by auth actions for UI detection
+        const hasSession = document.cookie.includes('skillsync_session=true');
+        setIsLoggedIn(hasSession);
     }, []);
 
     if (isLoggedIn) {
         return (
-            <Link href="/dashboard" className="text-sm font-bold px-4 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:opacity-90 rounded-full shadow-sm transition-all flex items-center gap-2">
-                <span className="material-symbols-outlined text-lg">dashboard</span>
-                Dashboard
-            </Link>
+            <div className="flex items-center gap-4">
+                <Link href="/dashboard" className="text-sm font-bold px-4 py-2 bg-slate-900 dark:bg-white text-white dark:text-slate-900 hover:opacity-90 rounded-full shadow-sm transition-all flex items-center gap-2">
+                    <span className="material-symbols-outlined text-lg">dashboard</span>
+                    Dashboard
+                </Link>
+                <form action={async () => {
+                    const { logoutAction } = await import("@/features/auth/actions");
+                    await logoutAction();
+                }}>
+                    <button type="submit" className="text-sm font-bold text-slate-500 hover:text-red-500 transition-colors flex items-center gap-1">
+                        <span className="material-symbols-outlined text-lg">logout</span>
+                        <span className="hidden lg:inline">Logout</span>
+                    </button>
+                </form>
+            </div>
         );
     }
 
