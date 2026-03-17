@@ -21,7 +21,7 @@ export default function DashboardSidebar({
           style={{ backgroundImage: 'url("https://lh3.googleusercontent.com/aida-public/AB6AXuAs17bU3rIouTgNjBdP1LAEfCfrJ0ef0Qqf2OTGBidiwrqva-MkyupB0L8WHDUi1_bZYQVIFUjeVAFsramQ1IKOo5-nZjq6MYBmXckvow52QcfIMTkvghXeOj1w6ddyX3ta7TsE7nsUwmqPQg5MmBOE6WXghZbTk6MfZrNPQBMzf3BiOk3JnwVIQOrgSSwEVjQD5i29Ytazs6pZZTqn86pwzzepqLpyT16MAlf6E6BKQEaEnmnjsSChfKoNBGy7RIzP-I_Nl-czFaY")' }}
         ></div>
         <h1 className="text-slate-900 dark:text-white text-lg font-bold leading-tight">{fullName}</h1>
-        <p className="text-slate-500 dark:text-slate-400 text-sm font-normal">{role}</p>
+        <p className="text-slate-500 dark:text-slate-300 text-sm font-normal">{role}</p>
         <div className="mt-4 w-full">
           <div className="flex justify-between text-xs mb-1">
             <span className="text-slate-600 dark:text-slate-300 font-medium">Profile Completeness</span>
@@ -30,7 +30,18 @@ export default function DashboardSidebar({
           <div className="w-full bg-slate-200 dark:bg-slate-700 rounded-full h-2">
             <div className="bg-primary h-2 rounded-full" style={{ width: `${completeness}%` }}></div>
           </div>
-          <p className="text-xs text-slate-400 mt-2 text-left">Complete your profile to get 3x more views.</p>
+          <p className="text-xs text-slate-400 dark:text-slate-300 mt-2 text-left">Complete your profile to get 3x more views.</p>
+        </div>
+        
+        {/* Actionable Prompt */}
+        <div className="mt-4 w-full bg-yellow-50 dark:bg-yellow-900/20 p-3 rounded-lg border border-yellow-100 dark:border-yellow-900/30 text-left">
+          <div className="flex items-center gap-2 text-yellow-700 dark:text-yellow-400 mb-1">
+            <span className="material-symbols-outlined text-sm">lightbulb</span>
+            <span className="text-xs font-bold uppercase tracking-wider">Quick Advice</span>
+          </div>
+          <p className="text-xs text-slate-600 dark:text-slate-300">
+            🚀 Add <span className="font-bold">AWS</span> to increase matches by <span className="text-primary dark:text-blue-400">23%</span>
+          </p>
         </div>
       </div>
 

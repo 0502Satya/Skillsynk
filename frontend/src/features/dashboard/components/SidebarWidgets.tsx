@@ -3,6 +3,30 @@ import React from "react";
 export default function SidebarWidgets() {
   return (
     <div className="flex flex-col gap-8">
+      {/* Today's Action Plan */}
+      <div className="bg-white dark:bg-slate-900 p-6 rounded-xl border border-slate-200 dark:border-slate-800 shadow-sm">
+        <h3 className="text-lg font-bold text-slate-900 dark:text-white mb-4 flex items-center gap-2">
+          <span className="material-symbols-outlined text-primary">event_upcoming</span>
+          Today&apos;s Action Plan
+        </h3>
+        <ul className="text-sm space-y-3">
+          <li className="flex items-center gap-3 text-slate-600 dark:text-slate-300">
+            <span className="material-symbols-outlined text-green-500 text-lg">check_circle</span>
+            <span>Apply to 3 high-match jobs</span>
+          </li>
+          <li className="flex items-center gap-3 text-slate-600 dark:text-slate-300">
+            <span className="material-symbols-outlined text-primary text-lg">bolt</span>
+            <span>Complete React profile section</span>
+          </li>
+          <li className="flex items-center gap-3 text-slate-600 dark:text-slate-300">
+            <span className="material-symbols-outlined text-purple-500 text-lg">psychology</span>
+            <span>Practice 1 mock interview session</span>
+          </li>
+        </ul>
+        <button className="w-full mt-5 py-2 text-sm font-bold text-white bg-primary rounded-lg hover:opacity-90 transition-opacity">
+          Let&apos;s Go
+        </button>
+      </div>
       {/* Learning Progress */}
       <div className="bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 p-6 shadow-sm">
         <div className="flex items-center justify-between mb-4">

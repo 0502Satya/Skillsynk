@@ -26,8 +26,31 @@ export default function CandidateDashboardPage() {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-slate-50 dark:bg-slate-950">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+      <div className="bg-background-light dark:bg-background-dark min-h-screen flex flex-col">
+        <div className="h-16 border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 animate-pulse"></div>
+        <div className="flex flex-1 w-full max-w-[1440px] mx-auto">
+          <div className="hidden md:block w-64 border-r border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-6 space-y-6">
+            <div className="h-20 w-20 rounded-full bg-slate-200 dark:bg-slate-800 mx-auto animate-pulse"></div>
+            <div className="h-4 w-32 bg-slate-200 dark:bg-slate-800 mx-auto rounded animate-pulse"></div>
+            <div className="space-y-3 pt-10">
+              {[1, 2, 3, 4, 5].map((i) => (
+                <div key={i} className="h-10 w-full bg-slate-100 dark:bg-slate-800/50 rounded animate-pulse"></div>
+              ))}
+            </div>
+          </div>
+          <main className="flex-1 p-6 md:p-10 space-y-8">
+            <div className="space-y-3">
+              <div className="h-8 w-64 bg-slate-200 dark:bg-slate-800 rounded animate-pulse"></div>
+              <div className="h-4 w-96 bg-slate-100 dark:bg-slate-800 rounded animate-pulse"></div>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              {[1, 2, 3].map((i) => (
+                <div key={i} className="h-32 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 animate-pulse"></div>
+              ))}
+            </div>
+            <div className="h-96 bg-white dark:bg-slate-900 rounded-xl border border-slate-200 dark:border-slate-800 animate-pulse"></div>
+          </main>
+        </div>
       </div>
     );
   }
@@ -86,6 +109,21 @@ export default function CandidateDashboardPage() {
               Welcome back, {profile?.full_name || "Alice"}! 👋
             </h2>
             <p className="text-slate-500 dark:text-slate-400">Here&apos;s what&apos;s happening with your job search today.</p>
+            
+            {/* Primary Action CTAs */}
+            <div className="flex flex-wrap gap-3 mt-6">
+              <button className="bg-primary hover:bg-blue-700 text-white px-6 py-2.5 rounded-xl font-bold transition-all shadow-lg shadow-primary/20 flex items-center gap-2">
+                <span className="material-symbols-outlined">rocket_launch</span>
+                Apply to Recommended Jobs
+              </button>
+              <Link 
+                href="/dashboard/profile"
+                className="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 hover:bg-slate-200 dark:hover:bg-slate-700 px-6 py-2.5 rounded-xl font-bold transition-all flex items-center gap-2"
+              >
+                <span className="material-symbols-outlined">edit_square</span>
+                Complete Profile
+              </Link>
+            </div>
           </div>
 
           <DashboardStats />
