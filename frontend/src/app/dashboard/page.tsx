@@ -4,6 +4,10 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { getCandidateProfileAction } from "@/features/auth/actions";
 import UserMenu from "@/features/auth/components/UserMenu";
+import DashboardSidebar from "@/features/dashboard/components/DashboardSidebar";
+import DashboardStats from "@/features/dashboard/components/DashboardStats";
+import JobFeed from "@/features/dashboard/components/JobFeed";
+import SidebarWidgets from "@/features/dashboard/components/SidebarWidgets";
 
 export default function CandidateDashboardPage() {
   const [profile, setProfile] = useState<any>(null);
@@ -29,89 +33,72 @@ export default function CandidateDashboardPage() {
   }
 
   return (
-    <div className="min-h-screen bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 transition-colors pb-20">
+    <div className="bg-background-light dark:bg-background-dark font-display text-slate-900 dark:text-slate-100 min-h-screen flex flex-col transition-colors">
       
       {/* Header */}
-      <header className="flex items-center justify-between border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 md:px-12 py-4 sticky top-0 z-50">
-        <div className="flex items-center gap-6">
-          <Link href="/" className="flex items-center gap-2 text-primary font-bold">
-            <span className="material-symbols-outlined text-3xl">hub</span>
-            <span className="text-xl">SkillSync</span>
+      <header className="flex items-center justify-between whitespace-nowrap border-b border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 px-6 md:px-10 py-3 sticky top-0 z-50">
+        <div className="flex items-center gap-8">
+          <Link href="/" className="flex items-center gap-4">
+            <div className="text-primary size-8 flex items-center justify-center">
+              <span className="material-symbols-outlined text-3xl">hub</span>
+            </div>
+            <h2 className="text-slate-900 dark:text-white text-xl font-bold leading-tight tracking-tight">SkillSync</h2>
           </Link>
-          <div className="h-6 w-px bg-slate-200 dark:bg-slate-800 hidden md:block"></div>
-          <span className="text-sm font-bold text-slate-500">Candidate Dashboard</span>
+          <div className="hidden lg:flex flex-col min-w-40 !h-10 max-w-64">
+            <div className="flex w-full flex-1 items-stretch rounded-lg h-full group">
+              <div className="text-slate-500 dark:text-slate-400 flex border-none bg-slate-100 dark:bg-slate-800 items-center justify-center pl-4 rounded-l-lg border-r-0">
+                <span className="material-symbols-outlined">search</span>
+              </div>
+              <input 
+                className="form-input flex w-full min-w-0 flex-1 resize-none overflow-hidden rounded-lg text-slate-900 dark:text-slate-100 focus:outline-0 focus:ring-0 border-none bg-slate-100 dark:bg-slate-800 focus:border-none h-full placeholder:text-slate-500 dark:placeholder:text-slate-400 px-4 rounded-l-none border-l-0 pl-2 text-sm font-normal leading-normal" 
+                placeholder="Search jobs, skills, companies..." 
+              />
+            </div>
+          </div>
         </div>
-        <div className="flex items-center gap-4">
-          <UserMenu initials={profile?.full_name ? profile.full_name.substring(0, 2).toUpperCase() : "AL"} />
+        
+        <div className="flex flex-1 justify-end gap-8">
+          <div className="flex items-center gap-6 hidden xl:flex">
+            <Link className="text-slate-700 dark:text-slate-300 hover:text-primary dark:hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Jobs</Link>
+            <Link className="text-slate-700 dark:text-slate-300 hover:text-primary dark:hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Companies</Link>
+            <Link className="text-slate-700 dark:text-slate-300 hover:text-primary dark:hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Salaries</Link>
+            <Link className="text-slate-700 dark:text-slate-300 hover:text-primary dark:hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Community</Link>
+            <Link className="text-slate-700 dark:text-slate-300 hover:text-primary dark:hover:text-primary transition-colors text-sm font-medium leading-normal" href="#">Upskill</Link>
+          </div>
+          <div className="flex gap-3 items-center">
+            <button className="flex items-center justify-center overflow-hidden rounded-full h-10 w-10 bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-200 dark:hover:bg-slate-700 transition-colors">
+              <span className="material-symbols-outlined">notifications</span>
+            </button>
+            <div className="flex items-center gap-4">
+              <UserMenu initials={profile?.full_name ? profile.full_name.substring(0, 2).toUpperCase() : "AL"} />
+            </div>
+          </div>
         </div>
       </header>
 
-      <main className="p-6 md:p-12 max-w-7xl mx-auto space-y-8">
+      <div className="flex flex-1 w-full max-w-[1440px] mx-auto">
+        <DashboardSidebar fullName={profile?.full_name} />
         
-        {/* Welcome Section */}
-        <section className="bg-white dark:bg-slate-900 rounded-[2rem] p-8 md:p-12 border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-none">
-          <div className="flex flex-col md:flex-row items-center gap-8">
-            <div className="size-32 bg-primary/10 rounded-full flex items-center justify-center text-primary">
-              <span className="material-symbols-outlined text-6xl">person</span>
-            </div>
-            <div className="text-center md:text-left space-y-2">
-              <h1 className="text-4xl font-black tracking-tight text-slate-900 dark:text-white">
-                Welcome back, {profile?.full_name || "Alice"}!
-              </h1>
-              <p className="text-slate-500 text-lg max-w-xl">
-                You have 3 active job applications and 5 new skill matches for your profile.
-              </p>
-              <div className="pt-4">
-                <Link 
-                  href="/dashboard/profile"
-                  className="inline-flex items-center gap-2 px-6 py-3 bg-primary/10 hover:bg-primary/20 text-primary font-bold rounded-xl transition-all group"
-                >
-                  <span className="material-symbols-outlined group-hover:rotate-12 transition-transform">edit_square</span>
-                  <span>Complete Your Profile</span>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Quick Actions / Stats */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-lg">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="size-10 rounded-xl bg-blue-100 dark:bg-blue-900/30 text-blue-600 flex items-center justify-center">
-                <span className="material-symbols-outlined">work</span>
-              </div>
-              <h3 className="font-bold">Applications</h3>
-            </div>
-            <p className="text-3xl font-black">12</p>
-            <p className="text-sm text-slate-500 mt-1">4 pending review</p>
+        <main className="flex-1 p-6 md:p-10 overflow-x-hidden">
+          {/* Welcome Header */}
+          <div className="mb-8">
+            <h2 className="text-3xl font-black tracking-tight text-slate-900 dark:text-white mb-2">
+              Welcome back, {profile?.full_name || "Alice"}! 👋
+            </h2>
+            <p className="text-slate-500 dark:text-slate-400">Here&apos;s what&apos;s happening with your job search today.</p>
           </div>
 
-          <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-lg">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="size-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 flex items-center justify-center">
-                <span className="material-symbols-outlined">bolt</span>
-              </div>
-              <h3 className="font-bold">Skill Matches</h3>
+          <DashboardStats />
+
+          <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            <div className="lg:col-span-2">
+              <JobFeed />
             </div>
-            <p className="text-3xl font-black">28</p>
-            <p className="text-sm text-slate-500 mt-1">8 exclusive invites</p>
+            
+            <SidebarWidgets />
           </div>
-
-          <div className="bg-white dark:bg-slate-900 p-6 rounded-3xl border border-slate-200 dark:border-slate-800 shadow-lg">
-            <div className="flex items-center gap-4 mb-4">
-              <div className="size-10 rounded-xl bg-amber-100 dark:bg-amber-900/30 text-amber-600 flex items-center justify-center">
-                <span className="material-symbols-outlined">visibility</span>
-              </div>
-              <h3 className="font-bold">Profile Views</h3>
-            </div>
-            <p className="text-3xl font-black">145</p>
-            <p className="text-sm text-slate-500 mt-1">+12% from last week</p>
-          </div>
-        </div>
-
-      </main>
-
+        </main>
+      </div>
     </div>
   );
 }
