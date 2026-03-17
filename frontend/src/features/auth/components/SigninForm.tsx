@@ -1,24 +1,26 @@
 "use client";
 
-import React from "react";
+import React, { useActionState } from "react";
+import { loginAction } from "@/features/auth/actions";
 import Link from "next/link";
 
 /**
  * Re-implemented SigninForm for restoration.
- * Handles mock login with a session cookie for easy testing.
+ * Wired to Django backend via Next.js Server Actions for secure HttpOnly cookie management.
  */
 export default function SigninForm({ role = "Candidate" }: { role?: string }) {
-  // Mock login handler
-  const handleLogin = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Set a mock session cookie (lasts 1 day)
-    document.cookie = "skillsync_session=true; path=/; max-age=86400; SameSite=Lax";
-    // Redirect to the home of the current subdomain (which is the dashboard)
-    window.location.href = "/";
-  };
+  // React 19 hook for Server Actions
+  const [state, formAction, isPending] = useActionState(loginAction, null);
 
   return (
-    <form className="space-y-5" onSubmit={handleLogin}>
+    <form action={formAction} className="space-y-5">
+      {/* Render Server Errors */}
+      {state?.error && (
+        <div className="bg-red-50 dark:bg-red-900/30 text-red-600 dark:text-red-400 p-3 rounded-lg text-sm mb-4 border border-red-200 dark:border-red-800">
+          {state.error}
+        </div>
+      )}
+      
       {/* Input for Email Address */}
       <div className="space-y-2">
         <label className="block text-sm font-medium text-slate-700 dark:text-slate-300" htmlFor="email">
@@ -29,9 +31,11 @@ export default function SigninForm({ role = "Candidate" }: { role?: string }) {
           <input 
             className="w-full pl-10 pr-4 py-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all" 
             id="email" 
+            name="email"
             placeholder="name@example.com" 
             type="email"
             required
+            disabled={isPending}
           />
         </div>
       </div>
@@ -51,9 +55,11 @@ export default function SigninForm({ role = "Candidate" }: { role?: string }) {
           <input 
             className="w-full pl-10 pr-4 py-3 rounded-lg border border-slate-300 dark:border-slate-700 bg-white dark:bg-slate-800 focus:ring-2 focus:ring-primary focus:border-primary outline-none transition-all" 
             id="password" 
+            name="password"
             placeholder="••••••••" 
             type="password"
             required
+            disabled={isPending}
           />
         </div>
       </div>
@@ -61,9 +67,11 @@ export default function SigninForm({ role = "Candidate" }: { role?: string }) {
       {/* Checkbox to stay logged in */}
       <div className="flex items-center">
         <input 
-          className="w-4 h-4 rounded border-slate-300 text-primary focus:ring-primary cursor-pointer" 
+          className="w-4 h-4 rounded border-slate-300 text-primary focus:ring-primary cursor-pointer disabled:opacity-50" 
           id="remember" 
           type="checkbox"
+          name="remember"
+          disabled={isPending}
         />
         <label className="ml-2 text-sm text-slate-600 dark:text-slate-400 cursor-pointer select-none" htmlFor="remember">
           Remember me for 30 days
@@ -72,10 +80,14 @@ export default function SigninForm({ role = "Candidate" }: { role?: string }) {
 
       {/* The main blue button to sign in */}
       <button 
-        className="w-full bg-primary hover:bg-primary/90 text-white font-bold py-3.5 px-4 rounded-lg transition-all shadow-lg shadow-primary/20 active:scale-[0.98]" 
+        className="flex justify-center items-center w-full bg-primary hover:bg-primary/90 text-white font-bold py-3.5 px-4 rounded-lg transition-all shadow-lg shadow-primary/20 active:scale-[0.98] disabled:opacity-75 disabled:cursor-not-allowed" 
         type="submit"
+        disabled={isPending}
       >
-        Sign In as {role}
+        {isPending ? (
+          <span className="material-symbols-outlined animate-spin mr-2">progress_activity</span>
+        ) : null}
+        {isPending ? "Signing In..." : `Sign In as ${role}`}
       </button>
     </form>
   );

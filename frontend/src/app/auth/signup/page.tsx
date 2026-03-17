@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import SignupForm from "@/features/auth/components/SignupForm";
+import SocialLogin from "@/features/auth/components/SocialLogin";
 
 /**
  * Candidate Sign Up Page.
@@ -20,6 +21,15 @@ export default function SignupPage() {
           </Link>
           <h1 className="text-2xl font-black text-slate-900 dark:text-white tracking-tight">Create an account</h1>
           <p className="text-slate-500 dark:text-slate-400 text-sm">Join the network of top talent and top companies.</p>
+        </div>
+
+        {/* Social Logins */}
+        <SocialLogin />
+
+        <div className="relative flex items-center">
+          <div className="flex-grow border-t border-slate-200 dark:border-slate-800"></div>
+          <span className="flex-shrink mx-4 text-slate-400 text-[10px] font-black uppercase tracking-widest">or continue with email</span>
+          <div className="flex-grow border-t border-slate-200 dark:border-slate-800"></div>
         </div>
 
         {/* Details Form directly */}
