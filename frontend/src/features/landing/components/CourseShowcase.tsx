@@ -49,11 +49,11 @@ export default function CourseShowcase() {
                 </div>
 
                 {/* Grid showing the list of courses */}
-                <div className="grid md:grid-cols-3 gap-8">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
                     {courses.map((course) => (
-                        <div key={course.title} className="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-xl transition-all group">
+                        <div key={course.title} className="bg-white dark:bg-slate-800 rounded-2xl overflow-hidden border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-xl transition-all group min-w-0">
                             {/* Image with a 'Bestseller' tag if needed */}
-                            <div className="h-48 overflow-hidden relative">
+                            <div className="h-40 sm:h-48 overflow-hidden relative">
                                 <img
                                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                                     alt={course.title}
@@ -66,7 +66,7 @@ export default function CourseShowcase() {
                                 )}
                             </div>
                             {/* Details like Category, Rating, Title, and Price */}
-                            <div className="p-6">
+                            <div className="p-5 sm:p-6">
                                 <div className="flex items-center gap-2 mb-3">
                                     <span className="text-xs font-semibold px-2 py-1 bg-primary/10 text-primary rounded">{course.category}</span>
                                     <div className="flex items-center text-yellow-500">
@@ -74,11 +74,11 @@ export default function CourseShowcase() {
                                         <span className="text-xs font-bold ml-1">{course.rating}</span>
                                     </div>
                                 </div>
-                                <h4 className="text-lg font-bold mb-2 text-slate-900 dark:text-white">{course.title}</h4>
-                                <p className="text-slate-500 text-sm mb-6 leading-relaxed">{course.description}</p>
-                                <div className="flex items-center justify-between">
+                                <h4 className="text-lg font-bold mb-2 text-slate-900 dark:text-white truncate">{course.title}</h4>
+                                <p className="text-slate-500 text-sm mb-6 leading-relaxed line-clamp-2">{course.description}</p>
+                                <div className="flex items-center justify-between gap-4">
                                     <span className="text-xl font-black text-slate-900 dark:text-white">{course.price}</span>
-                                    <button className="text-primary font-bold text-sm hover:underline">Enroll Now</button>
+                                    <button className="text-primary font-bold text-sm hover:underline min-h-[44px]">Enroll Now</button>
                                 </div>
                             </div>
                         </div>

@@ -11,7 +11,7 @@ export function middleware(request: NextRequest) {
   const pathname = url.pathname;
 
   // Mock session check - looks for a 'jwt_access' cookie
-  const isLoggedIn = request.cookies.has('jwt_access') || request.cookies.has('skillsync_session');
+  const isLoggedIn = request.cookies.has('jwt_access') || request.cookies.has('joblyne_session');
 
   // List of paths that don't need a login (Auth pages)
   const isAuthPage = pathname.startsWith('/auth/signin') || 
@@ -39,6 +39,12 @@ export function middleware(request: NextRequest) {
 
   // 2. Recruiter Subdomain Logic
   if (host.startsWith('recruiter.')) {
+    // Redirect if it starts with /recruiter to keep URLs clean
+    if (pathname.startsWith('/recruiter')) {
+      url.pathname = pathname.replace('/recruiter', '') || '/';
+      return NextResponse.redirect(url);
+    }
+
     // If not logged in and not on an auth page, redirect to sign-in
     // Note: isAuthPage logic handles '/auth/' correctly now
     if (!isLoggedIn && !isAuthPage) {
@@ -55,6 +61,12 @@ export function middleware(request: NextRequest) {
 
   // 3. Company Subdomain Logic
   if (host.startsWith('company.')) {
+    // Redirect if it starts with /company to keep URLs clean
+    if (pathname.startsWith('/company')) {
+      url.pathname = pathname.replace('/company', '') || '/';
+      return NextResponse.redirect(url);
+    }
+
     // If not logged in and not on an auth page, redirect to sign-in
     if (!isLoggedIn && !isAuthPage) {
       url.pathname = '/auth/signin';

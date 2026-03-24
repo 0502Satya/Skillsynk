@@ -1,4 +1,4 @@
-# SkillSync
+# JobLyne
 
 A modern job board and skill matching platform built with Next.js and Django.
 

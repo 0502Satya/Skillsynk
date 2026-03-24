@@ -2,40 +2,62 @@
 @import "tailwindcss";
 
 /* 
-  This block sets up the brand colors and settings. 
-  It replaces the old tailwind.config.ts file for color settings.
+  This block sets up the brand colors and settings.
+  Change ANY color here and the entire app updates automatically.
+  ─────────────────────────────────────────────────────────────
+  QUICK GUIDE: To change the brand color, update --color-primary.
+  All other components reference this variable via Tailwind classes.
 */
 @theme {
-  /* These are the main colors used in the app */
-  --color-primary: #135bec;
-  --color-accent: #f97316;
+  /* ── Brand Colors (RGB for opacity support) ── */
+  --color-primary: 19 91 236; /* #135bec */
+  --color-primary-dark: 15 73 189; /* #0f49bd */
+  --color-primary-light: 240 244 255; /* #f0f4ff */
+  
+  /* ── Semantic System ── */
   --color-bg: #f6f6f8;
   --color-surface: #ffffff;
+  --color-card: #ffffff;
   --color-text: #0f172a;
   --color-muted: #64748b;
   --color-border: #e2e8f0;
 
-  /* This sets the main font to 'Inter' */
+  /* ── Status Colors ── */
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-error: #ef4444;
+
+  /* ── Component Level Tokens ── */
+  --color-btn-primary: rgb(var(--color-primary));
+  --color-btn-primary-hover: rgb(var(--color-primary-dark));
+  --color-input-bg: var(--color-surface);
+  --color-input-border: var(--color-border);
+
+  /* ── Visual Enhancements ── */
+  --gradient-primary: linear-gradient(135deg, rgb(var(--color-primary)), #4c33cf);
+  
+  /* ── Layout & Spacing ── */
+  --spacing-section: 80px;
+  --spacing-card: 24px;
+  --radius-xl: 12px;
+  --radius-2xl: 16px;
+  --radius-3xl: 24px;
+  --radius-card: 32px;
+
+  /* ── Typography ── */
   --font-display: "Inter", "sans-serif";
 
-  /* A slow, smooth bounce animation for floating elements */
+  /* ── Animations ── */
   --animate-bounce-subtle: bounce-subtle 4s ease-in-out infinite;
 
   @keyframes bounce-subtle {
-
-    0%,
-    100% {
-      transform: translateY(0);
-    }
-
-    50% {
-      transform: translateY(-8px);
-    }
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-8px); }
   }
 }
 
 /* 
-  Settings for Dark Mode. 
+  Settings for Dark Mode.
   It works when the HTML has a 'dark' class.
 */
 @variant dark (&:where(.dark, .dark *));
@@ -44,20 +66,46 @@
 
   /* These colors are used when the user switches to Dark Mode */
   .dark {
-    --color-bg: #101622;
-    --color-surface: #101622;
+    --color-primary: 79 124 255; /* #4f7cff - slightly lighter for dark mode */
+    --color-bg: #0f172a;
+    --color-surface: #111827;
+    --color-card: #1e293b;
     --color-text: #f1f5f9;
     --color-muted: #94a3b8;
-    --color-border: #1e293b;
+    --color-border: #334155;
+
+    --color-page: var(--color-bg);
+  }
+
+  :root {
+    --color-page: #f6f6f8;
   }
 
   /* Basic settings for the whole page */
+  html, body {
+    overflow-x: hidden;
+    width: 100%;
+    position: relative;
+    box-sizing: border-box;
+  }
+
+  *, ::before, ::after {
+    box-sizing: border-box;
+  }
+
   body {
     background-color: var(--color-bg);
     color: var(--color-text);
     font-family: var(--font-display);
     transition: background-color 0.3s ease, color 0.3s ease;
+    min-height: 100vh;
     @apply antialiased;
+  }
+
+  img, video, canvas, svg {
+    max-width: 100%;
+    height: auto;
+    display: block;
   }
 
   /* Settings for Google Icons to make them look nice and better */

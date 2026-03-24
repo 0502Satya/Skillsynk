@@ -13,7 +13,7 @@ export default function CompanySigninPage() {
 
   const handleSignin = (e: React.FormEvent) => {
     e.preventDefault();
-    document.cookie = "skillsync_session=true; path=/; max-age=86400; SameSite=Lax";
+    document.cookie = "joblyne_session=true; path=/; max-age=86400; SameSite=Lax";
     router.push("/");
   };
 
@@ -28,7 +28,7 @@ export default function CompanySigninPage() {
               <path d="M24 45.8096C19.6865 45.8096 15.4698 44.5305 11.8832 42.134C8.29667 39.7376 5.50128 36.3314 3.85056 32.3462C2.19985 28.361 1.76794 23.9758 2.60947 19.7452C3.451 15.5145 5.52816 11.6284 8.57829 8.5783C11.6284 5.52817 15.5145 3.45101 19.7452 2.60948C23.9758 1.76795 28.361 2.19986 32.3462 3.85057C36.3314 5.50129 39.7376 8.29668 42.134 11.8833C44.5305 15.4698 45.8096 19.6865 45.8096 24L24 24L24 45.8096Z" fill="currentColor"></path>
             </svg>
           </div>
-          <h2 className="text-slate-900 dark:text-white text-xl font-bold leading-tight tracking-[-0.015em]">SkillSync</h2>
+          <h2 className="text-slate-900 dark:text-white text-xl font-bold leading-tight tracking-[-0.015em]">JobLyne</h2>
         </Link>
         <div className="flex items-center gap-4">
           <span className="text-slate-500 text-xs hidden sm:block italic">Don&apos;t have an account?</span>
@@ -38,9 +38,9 @@ export default function CompanySigninPage() {
 
       <main className="flex-1 flex flex-col items-center justify-center py-12 px-4 relative overflow-hidden">
         {/* Background Decor */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 size-[600px] bg-primary/5 rounded-full blur-[100px] pointer-events-none"></div>
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[60vw] h-[60vw] max-w-[600px] max-h-[600px] bg-primary/5 rounded-full blur-[100px] pointer-events-none"></div>
 
-        <div className="w-full max-w-[480px] bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-8 md:p-10 shadow-2xl transition-all relative z-10">
+        <div className="w-full max-w-md bg-white dark:bg-slate-900 rounded-3xl border border-slate-200 dark:border-slate-800 p-8 md:p-10 shadow-2xl transition-all relative z-10">
           
           <div className="mb-10 text-center">
             <h1 className="text-3xl font-black text-slate-900 dark:text-white tracking-tight">Portal Sign In</h1>
@@ -93,7 +93,7 @@ export default function CompanySigninPage() {
       </main>
 
       <footer className="px-6 md:px-20 py-8 border-t border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 text-slate-500 text-[10px] font-bold uppercase tracking-widest flex flex-col sm:flex-row justify-between items-center gap-4 transition-colors">
-        <p>© 2024 SkillSync Inc. All rights reserved.</p>
+        <p>© 2024 JobLyne Inc. All rights reserved.</p>
         <div className="flex gap-8 italic">
           <Link className="hover:text-primary" href="#">Privacy</Link>
           <Link className="hover:text-primary" href="#">Terms</Link>
