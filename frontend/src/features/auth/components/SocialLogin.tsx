@@ -1,5 +1,6 @@
 import React from "react";
 import { useRouter } from "next/navigation";
+import { useGoogleLogin } from "@react-oauth/google";
 import { socialLoginAction } from "../actions";
 
 /**
@@ -9,23 +10,33 @@ import { socialLoginAction } from "../actions";
 export default function SocialLogin() {
   const router = useRouter();
 
+  const googleLogin = useGoogleLogin({
+    onSuccess: async (tokenResponse) => {
+      console.log("Google Login Success:", tokenResponse);
+      const result = await socialLoginAction("google", tokenResponse.access_token);
+      
+      if (result.success) {
+        router.push("/dashboard");
+        router.refresh();
+      } else {
+        alert(result.error || "Social login failed.");
+      }
+    },
+    onError: (error) => {
+      console.error("Google Login Failed:", error);
+      alert("Google Login Failed. Please try again.");
+    },
+  });
+
   const handleSocialLogin = async (provider: "google" | "linkedin") => {
-    // In a real environment, this would open a popup or redirect to the provider.
-    // Here we'll simulate the successful receipt of a token if we were in a real OAuth flow.
-    // For now, we inform the user to provide credentials for a real test.
-    console.log(`Initiating ${provider} login...`);
-    
-    // TEMPORARY: Simulate a token for demonstration if a special cookie is set
-    // In production, this would be replaced by the actual OAuth logic.
-    const mockToken = "SIMULATED_TOKEN";
-    const result = await socialLoginAction(provider, mockToken);
-    
-    if (result.success) {
-      router.push("/dashboard");
-      router.refresh();
-    } else {
-      alert(result.error || "Social login failed.");
+    if (provider === "google") {
+      googleLogin();
+      return;
     }
+
+    // LinkedIn login (placeholder for now)
+    console.log(`Initiating ${provider} login...`);
+    alert(`${provider} login is coming soon. Please use Google for now.`);
   };
 
   return (
@@ -33,7 +44,7 @@ export default function SocialLogin() {
       {/* Google Login Option */}
       <button 
         onClick={() => handleSocialLogin("google")}
-        className="flex items-center justify-center gap-2 px-4 py-3 border border-slate-300 dark:border-slate-700 rounded-lg hover:bg-slate-50 dark:hover:bg-slate-800 transition-all font-semibold text-slate-700 dark:text-slate-300 text-sm w-full"
+        className="flex items-center justify-center gap-2 px-4 py-3 border border-border rounded-lg hover:bg-bg transition-all font-semibold text-text text-sm w-full"
       >
         <svg className="w-5 h-5" viewBox="0 0 24 24">
           <path d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z" fill="#4285F4"/>

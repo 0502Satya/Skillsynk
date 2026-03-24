@@ -1,22 +1,25 @@
 "use client";
 
-import React from "react";
+import React, { useActionState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { recruiterSignupAction } from "@/features/auth/actions";
+import OTPVerification from "@/features/auth/components/OTPVerification";
 
 /**
  * High-fidelity Recruiter Registration.
  * Focuses on LinkedIn verification and trust badges.
  */
 export default function RecruiterSignupPage() {
-  const router = useRouter();
+  const [state, formAction, isPending] = useActionState(recruiterSignupAction, null);
 
-  const handleSignup = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Set mock session cookie
-    document.cookie = "skillsync_session=true; path=/; max-age=86400; SameSite=Lax";
-    router.push("/");
-  };
+  if (state?.requiresVerification) {
+    return (
+      <div className="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen font-display flex items-center justify-center p-6 transition-colors">
+        <OTPVerification email={state.email} />
+      </div>
+    );
+  }
 
   return (
     <div className="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen font-display transition-colors">
@@ -31,18 +34,18 @@ export default function RecruiterSignupPage() {
                   <path d="M24 45.8096C19.6865 45.8096 15.4698 44.5305 11.8832 42.134C8.29667 39.7376 5.50128 36.3314 3.85056 32.3462C2.19985 28.361 1.76794 23.9758 2.60947 19.7452C3.451 15.5145 5.52816 11.6284 8.57829 8.5783C11.6284 5.52817 15.5145 3.45101 19.7452 2.60948C23.9758 1.76795 28.361 2.19986 32.3462 3.85057C36.3314 5.50129 39.7376 8.29668 42.134 11.8833C44.5305 15.4698 45.8096 19.6865 45.8096 24L24 24L24 45.8096Z" fill="currentColor"></path>
                 </svg>
               </div>
-              <h2 className="text-slate-900 dark:text-white text-xl font-bold leading-tight tracking-[-0.015em]">SkillSync</h2>
+              <h2 className="text-slate-900 dark:text-white text-xl font-bold leading-tight tracking-[-0.015em]">JobLyne</h2>
             </Link>
             <div className="flex items-center gap-4">
               <span className="text-slate-500 text-sm hidden md:block">Need help? Contact support</span>
-              <Link href="/auth/signin" className="flex min-w-[84px] cursor-pointer items-center justify-center rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold shadow-lg shadow-primary/20 hover:opacity-90 transition-all active:scale-[0.98]">
+              <Link href="/recruiter/auth/signin" className="flex min-w-[84px] cursor-pointer items-center justify-center rounded-lg h-10 px-4 bg-primary text-white text-sm font-bold shadow-lg shadow-primary/20 hover:opacity-90 transition-all active:scale-[0.98]">
                 Sign In
               </Link>
             </div>
           </header>
 
-          <main className="flex-1 flex flex-col items-center py-12 px-4 transition-all">
-            <div className="w-full max-w-[1000px] grid grid-cols-1 lg:grid-cols-5 gap-12">
+          <main className="flex-1 flex flex-col items-center py-12 px-4 transition-all overflow-x-hidden">
+            <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-5 gap-8 lg:gap-12">
               
               {/* Left Side: Form */}
               <div className="lg:col-span-3 flex flex-col gap-8 animate-in fade-in slide-in-from-left-4 duration-500">
@@ -77,33 +80,48 @@ export default function RecruiterSignupPage() {
                     <div className="h-px bg-slate-200 dark:border-slate-800 flex-1"></div>
                   </div>
 
-                  <form onSubmit={handleSignup} className="space-y-6">
+                  {state?.error && (
+                    <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 p-4 rounded-lg flex items-center gap-3 text-red-600 dark:text-red-400">
+                      <span className="material-symbols-outlined">error</span>
+                      <p className="text-sm font-medium">{state.error}</p>
+                    </div>
+                  )}
+
+                  <form action={formAction} className="space-y-6">
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                       <div className="flex flex-col gap-2">
                         <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Full Name</label>
-                        <input className="w-full rounded-lg border-slate-300 dark:border-slate-700 dark:bg-slate-800 px-4 py-3 h-12 outline-none focus:ring-primary focus:border-primary transition-all text-slate-900 dark:text-white" placeholder="John Doe" type="text" required />
+                        <input name="full_name" className="w-full rounded-lg border-slate-300 dark:border-slate-700 dark:bg-slate-800 px-4 py-3 h-12 outline-none focus:ring-primary focus:border-primary transition-all text-slate-900 dark:text-white" placeholder="John Doe" type="text" required />
                       </div>
                       <div className="flex flex-col gap-2">
                         <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Work Email</label>
-                        <input className="w-full rounded-lg border-slate-300 dark:border-slate-700 dark:bg-slate-800 px-4 py-3 h-12 outline-none focus:ring-primary focus:border-primary transition-all text-slate-900 dark:text-white" placeholder="john@company.com" type="email" required />
+                        <input name="email" className="w-full rounded-lg border-slate-300 dark:border-slate-700 dark:bg-slate-800 px-4 py-3 h-12 outline-none focus:ring-primary focus:border-primary transition-all text-slate-900 dark:text-white" placeholder="john@company.com" type="email" required />
                       </div>
                       <div className="flex flex-col gap-2">
                         <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Company Name</label>
-                        <input className="w-full rounded-lg border-slate-300 dark:border-slate-700 dark:bg-slate-800 px-4 py-3 h-12 outline-none focus:ring-primary focus:border-primary transition-all text-slate-900 dark:text-white" placeholder="e.g. Acme Corp" type="text" required />
+                        <input name="companyName" className="w-full rounded-lg border-slate-300 dark:border-slate-700 dark:bg-slate-800 px-4 py-3 h-12 outline-none focus:ring-primary focus:border-primary transition-all text-slate-900 dark:text-white" placeholder="e.g. Acme Corp" type="text" required />
                       </div>
                       <div className="flex flex-col gap-2">
                         <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Designation</label>
-                        <input className="w-full rounded-lg border-slate-300 dark:border-slate-700 dark:bg-slate-800 px-4 py-3 h-12 outline-none focus:ring-primary focus:border-primary transition-all text-slate-900 dark:text-white" placeholder="Technical Recruiter" type="text" required />
+                        <input name="designation" className="w-full rounded-lg border-slate-300 dark:border-slate-700 dark:bg-slate-800 px-4 py-3 h-12 outline-none focus:ring-primary focus:border-primary transition-all text-slate-900 dark:text-white" placeholder="Technical Recruiter" type="text" required />
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Password</label>
+                        <input name="password" title="At least one letter and one number" className="w-full rounded-lg border-slate-300 dark:border-slate-700 dark:bg-slate-800 px-4 py-3 h-12 outline-none focus:ring-primary focus:border-primary transition-all text-slate-900 dark:text-white" placeholder="••••••••" type="password" required />
+                      </div>
+                      <div className="flex flex-col gap-2">
+                        <label className="text-sm font-semibold text-slate-700 dark:text-slate-300">Confirm Password</label>
+                        <input name="password_confirm" className="w-full rounded-lg border-slate-300 dark:border-slate-700 dark:bg-slate-800 px-4 py-3 h-12 outline-none focus:ring-primary focus:border-primary transition-all text-slate-900 dark:text-white" placeholder="••••••••" type="password" required />
                       </div>
                     </div>
                     <div className="flex items-center gap-3 bg-slate-50 dark:bg-slate-800 p-4 rounded-lg">
-                      <input type="checkbox" className="rounded text-primary focus:ring-primary cursor-pointer h-5 w-5" required />
+                      <input type="checkbox" name="terms" className="rounded text-primary focus:ring-primary cursor-pointer h-5 w-5" required />
                       <p className="text-xs text-slate-600 dark:text-slate-400">
                         I agree to the <Link href="#" className="text-primary hover:underline">Recruiter Terms of Service</Link> and <Link href="#" className="text-primary hover:underline">Privacy Policy</Link>.
                       </p>
                     </div>
-                    <button className="w-full px-8 py-4 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 font-bold rounded-xl shadow-lg hover:opacity-90 transition-all active:scale-[0.98]" type="submit">
-                      Create Recruiter Account
+                    <button disabled={isPending} className="w-full px-8 py-4 bg-slate-900 dark:bg-slate-100 text-white dark:text-slate-900 font-bold rounded-xl shadow-lg hover:opacity-90 disabled:opacity-50 transition-all active:scale-[0.98]" type="submit">
+                      {isPending ? "Creating Account..." : "Create Recruiter Account"}
                     </button>
                   </form>
                 </div>
@@ -193,7 +211,7 @@ export default function RecruiterSignupPage() {
               <Link className="hover:text-primary transition-colors" href="#">Terms of Service</Link>
               <Link className="hover:text-primary transition-colors" href="#">Cookie Policy</Link>
             </div>
-            <p>© 2024 SkillSync Inc. All rights reserved.</p>
+            <p>© 2026 JobLyne Inc. All rights reserved.</p>
           </footer>
         </div>
       </div>

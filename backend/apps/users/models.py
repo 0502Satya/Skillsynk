@@ -122,8 +122,14 @@ class JobSeekers(models.Model):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.OneToOneField('CustomUser', on_delete=models.CASCADE, null=True, blank=True, related_name='job_seekers_user')
     full_name = models.CharField(max_length=255, null=True, blank=True)
+    first_name = models.CharField(max_length=255, null=True, blank=True)
+    middle_name = models.CharField(max_length=255, null=True, blank=True)
+    last_name = models.CharField(max_length=255, null=True, blank=True)
     phone = models.CharField(max_length=255, null=True, blank=True)
+    whatsapp_number = models.CharField(max_length=255, null=True, blank=True)
     location = models.CharField(max_length=255, null=True, blank=True)
+    city = models.CharField(max_length=255, null=True, blank=True)
+    country = models.CharField(max_length=255, null=True, blank=True)
     video_intro_url = models.TextField(null=True, blank=True)
     headline = models.CharField(max_length=255, null=True, blank=True)
     summary = models.TextField(null=True, blank=True)
@@ -133,6 +139,30 @@ class JobSeekers(models.Model):
     currency = models.CharField(max_length=255, null=True, blank=True)
     resume_file_url = models.TextField(null=True, blank=True)
     resume_parsed_data = models.JSONField(null=True, blank=True)
+    
+    # Naukri-style Enhanced Fields
+    resume_headline = models.TextField(null=True, blank=True)
+    notice_period = models.CharField(max_length=100, null=True, blank=True) # e.g. "15 Days", "Immediate"
+    date_of_birth = models.DateField(null=True, blank=True)
+    gender = models.CharField(max_length=50, null=True, blank=True) # Male / Female / Other
+    marital_status = models.CharField(max_length=50, null=True, blank=True) # Single / Married
+    current_company = models.CharField(max_length=255, null=True, blank=True)
+    current_designation = models.CharField(max_length=255, null=True, blank=True)
+    industry = models.CharField(max_length=255, null=True, blank=True)
+    functional_area = models.CharField(max_length=255, null=True, blank=True)
+    ug_qualification = models.CharField(max_length=255, null=True, blank=True)
+    pg_qualification = models.CharField(max_length=255, null=True, blank=True)
+    pincode = models.CharField(max_length=20, null=True, blank=True)
+    
+    # Social Media / Portfolio Links
+    social_links = models.JSONField(null=True, blank=True) # e.g. {"facebook": "...", "instagram": "..."}
+    
+    # New Job Preference Fields
+    desired_titles = models.TextField(null=True, blank=True)
+    work_mode = models.JSONField(null=True, blank=True) # e.g. ["Remote", "Hybrid"]
+    preferred_locations = models.JSONField(null=True, blank=True) # e.g. ["New York", "London"]
+    is_open_to_opportunities = models.BooleanField(default=True)
+    
     created_at = models.DateTimeField(auto_now_add=True, null=True)
     updated_at = models.DateTimeField(auto_now=True, null=True)
     deleted_at = models.DateTimeField(null=True, blank=True)
@@ -1178,4 +1208,13 @@ class CommunicationDeliveryLogs(models.Model):
 
     class Meta:
         db_table = 'communication_delivery_logs'
+
+class EmailVerificationOTP(models.Model):
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    user = models.ForeignKey('CustomUser', on_delete=models.CASCADE, related_name='otp_codes')
+    otp_code = models.CharField(max_length=6)
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        db_table = 'email_verification_otps'
 

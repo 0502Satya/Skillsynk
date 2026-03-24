@@ -37,49 +37,48 @@ export default function RecommendedJobs() {
     ];
 
     return (
-        <section className="py-20 bg-background-light dark:bg-slate-900/20">
+        <section className="py-20 bg-bg transition-colors">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* Title and 'View All' button */}
-                <div className="flex justify-between items-end mb-10">
-                    <div>
-                        <h2 className="text-3xl font-black text-slate-900 dark:text-white mb-2">Recommended for You</h2>
-                        <p className="text-slate-600 dark:text-slate-400">Jobs that match your profile and search history.</p>
+                <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-6 mb-10">
+                    <div className="min-w-0">
+                        <h2 className="text-2xl sm:text-3xl font-black text-text mb-2 truncate">Recommended for You</h2>
+                        <p className="text-muted text-sm sm:text-base">Jobs that match your profile and search history.</p>
                     </div>
-                    <button className="text-primary font-bold hover:underline">View All Jobs</button>
+                    <button className="text-primary font-bold hover:underline shrink-0 min-h-[44px] text-sm text-left">View All Jobs</button>
                 </div>
 
-                {/* Grid showing the list of jobs */}
-                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                     {jobs.map((job) => (
-                        <div key={job.title} className="bg-white dark:bg-slate-800 p-6 rounded-2xl border border-slate-100 dark:border-slate-700 shadow-sm hover:shadow-md transition-all group">
-                            <div className="flex justify-between items-start mb-4">
+                        <div key={job.title} className="bg-surface p-5 sm:p-6 rounded-2xl border border-border shadow-sm hover:shadow-md transition-all group min-w-0">
+                            <div className="flex justify-between items-start mb-4 gap-4">
                                 {/* A circle with the company's short name (like TC) */}
-                                <div className={`w-12 h-12 rounded-xl flex items-center justify-center font-bold ${job.color === 'primary' ? 'bg-primary/10 text-primary' : 'bg-accent/10 text-accent'
+                                <div className={`w-10 h-10 sm:w-12 sm:h-12 rounded-xl flex items-center justify-center font-bold text-sm sm:text-base shrink-0 ${job.color === 'primary' ? 'bg-primary/10 text-primary' : 'bg-accent/10 text-accent'
                                     }`}>
                                     {job.logo}
                                 </div>
                                 {/* A small green tag showing the match percentage */}
-                                <span className="bg-green-100 text-green-700 text-[10px] font-bold px-2 py-1 rounded-full uppercase">
+                                <span className="bg-green-100 text-green-700 text-[9px] sm:text-[10px] font-bold px-2 py-1 rounded-full uppercase shrink-0">
                                     {job.match} Match
                                 </span>
                             </div>
 
-                            <h3 className="font-bold text-lg text-slate-900 dark:text-white mb-1 group-hover:text-primary transition-colors">
+                            <h3 className="font-bold text-lg text-text mb-1 group-hover:text-primary transition-colors truncate">
                                 {job.title}
                             </h3>
-                            <p className="text-slate-500 text-sm mb-4">{job.company} • {job.location}</p>
+                            <p className="text-muted text-sm mb-4 truncate">{job.company} • {job.location}</p>
 
                             {/* Extra details like Salary and Job Type */}
-                            <div className="flex items-center gap-4 text-xs font-semibold text-slate-600 dark:text-slate-400 mb-6">
+                            <div className="flex flex-wrap items-center gap-3 sm:gap-4 text-[11px] sm:text-xs font-semibold text-muted mb-6">
                                 <span className="flex items-center gap-1">
-                                    <span className="material-symbols-outlined text-sm">payments</span> {job.salary}
+                                    <span className="material-symbols-outlined text-sm shrink-0">payments</span> {job.salary}
                                 </span>
                                 <span className="flex items-center gap-1">
-                                    <span className="material-symbols-outlined text-sm">schedule</span> {job.type}
+                                    <span className="material-symbols-outlined text-sm shrink-0">schedule</span> {job.type}
                                 </span>
                             </div>
 
-                            <button className="w-full py-3 bg-slate-100 dark:bg-slate-700 text-slate-900 dark:text-white font-bold rounded-xl hover:bg-primary hover:text-white transition-all">
+                            <button className="w-full py-3.5 bg-bg text-text font-bold rounded-xl hover:bg-btn-primary hover:text-surface transition-all min-h-[44px]">
                                 Apply Now
                             </button>
                         </div>

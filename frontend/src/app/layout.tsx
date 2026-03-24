@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
+import Providers from "./Providers";
 
 /**
  * Setting up the 'Inter' font for the whole website.
@@ -11,8 +12,8 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "SkillSync - Your Career Intelligence Platform",
-  description: "SkillSync helps teams find skill gaps, plan growth, and track success.",
+  title: "SkillSync - Your AI-Powered Career Intelligence Platform",
+  description: "SkillSync helps teams find skill gaps, plan growth, and track success with precision.",
 };
 
 /**
@@ -33,10 +34,12 @@ export default function RootLayout({
         />
       </head>
       <body
-        className={`${inter.variable} antialiased font-display bg-[#f6f6f8] dark:bg-[#101622] text-slate-900 dark:text-slate-100 transition-colors flex flex-col min-h-screen`}
+        className={`${inter.variable} antialiased font-display bg-bg text-text transition-colors flex flex-col min-h-screen`}
         suppressHydrationWarning
       >
-        {children}
+        <Providers>
+          {children}
+        </Providers>
       </body>
     </html>
   );

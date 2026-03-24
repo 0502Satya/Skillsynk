@@ -1,5 +1,14 @@
 import type { Config } from "tailwindcss";
 
+/**
+ * Tailwind Configuration
+ * ─────────────────────
+ * Colors are defined as CSS custom properties in globals.css @theme block.
+ * This config maps them to Tailwind utility classes so you can use:
+ *   bg-primary, text-stat-blue, bg-page, etc.
+ *
+ * To change the brand color → edit --color-primary in globals.css
+ */
 const config: Config = {
   darkMode: "class",
   content: [
@@ -7,7 +16,27 @@ const config: Config = {
   ],
   theme: {
     extend: {
-      extend: {},
+      colors: {
+        primary: {
+          DEFAULT: "var(--color-primary)",
+          dark: "var(--color-primary-dark)",
+          light: "var(--color-primary-light)",
+        },
+        "accent-gradient": "var(--color-accent-gradient)",
+        "stat-blue": "var(--color-stat-blue)",
+        "stat-green": "var(--color-stat-green)",
+        "stat-lime": "var(--color-stat-lime)",
+        page: "var(--color-page)",
+        surface: "var(--color-surface)",
+        sidebar: {
+          bg: "var(--color-primary-dark)",
+          hover: "var(--color-primary-dark)",
+        }
+      },
+      fontFamily: {
+        sans: ["Inter", "sans-serif"],
+        display: ["Outfit", "sans-serif"],
+      }
     },
   },
   plugins: [],
