@@ -62,7 +62,7 @@ export default function OrganizationSettingsPage() {
         <div className="flex items-center gap-6">
           <Link href="/company" className="flex items-center gap-2 text-primary font-bold">
             <span className="material-symbols-outlined text-3xl">hub</span>
-            <span className="text-xl">SkillSync</span>
+            <span className="text-xl">JobLyne</span>
           </Link>
           <div className="h-6 w-px bg-slate-200 dark:bg-slate-800 hidden md:block"></div>
           <span className="text-sm font-bold text-slate-500">Organization Settings</span>

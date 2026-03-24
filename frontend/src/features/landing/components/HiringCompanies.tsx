@@ -11,16 +11,16 @@ export default function HiringCompanies() {
     ];
 
     return (
-        <section className="py-8 bg-white dark:bg-[#101622] border-b border-slate-100 dark:border-slate-800">
+        <section className="py-8 bg-surface border-b border-border transition-colors">
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 {/* A simple horizontal list of company names */}
-                <div className="flex flex-wrap items-center justify-center gap-8 md:gap-16 opacity-50 grayscale hover:grayscale-0 transition-all">
-                    <span className="text-lg font-bold text-slate-400">TOP HIRING COMPANIES:</span>
+                <div className="flex flex-wrap items-center justify-center gap-4 sm:gap-8 md:gap-16 opacity-50 grayscale hover:grayscale-0 transition-all font-display">
+                    <span className="text-[10px] sm:text-xs font-black text-muted uppercase tracking-[0.2em] w-full text-center md:w-auto md:text-left mb-2 md:mb-0">Top Hiring Companies:</span>
                     {companies.map((company) => (
                         <div key={company.name} className="flex items-center gap-2">
                             {/* Rounded circle placeholder for the logo */}
-                            <div className="w-8 h-8 bg-slate-200 rounded-full"></div>
-                            <span className="font-bold text-slate-600">{company.name}</span>
+                            <div className="w-6 h-6 sm:w-8 sm:h-8 bg-bg rounded-full shrink-0"></div>
+                            <span className="font-black text-text text-xs sm:text-sm tracking-tight">{company.name}</span>
                         </div>
                     ))}
                 </div>

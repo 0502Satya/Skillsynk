@@ -4,6 +4,7 @@ import React, { useState, useTransition } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { companySignupAction } from "@/features/auth/actions";
+import OTPVerification from "@/features/auth/components/OTPVerification";
 
 export default function CompanySignupPage() {
   const [isPending, startTransition] = useTransition();
@@ -15,6 +16,8 @@ export default function CompanySignupPage() {
     password: "",
     password_confirm: ""
   });
+  const [requiresVerification, setRequiresVerification] = useState(false);
+  const [userEmail, setUserEmail] = useState("");
   const router = useRouter();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
@@ -34,11 +37,22 @@ export default function CompanySignupPage() {
       const res = await companySignupAction(null, formDataObj);
       if (res?.error) {
         setError(res.error);
+      } else if (res?.requiresVerification) {
+        setUserEmail(res.email);
+        setRequiresVerification(true);
       } else if (res?.success) {
         router.push("/");
       }
     });
   };
+
+  if (requiresVerification) {
+    return (
+      <div className="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen font-display flex items-center justify-center p-6 transition-colors">
+        <OTPVerification email={userEmail} />
+      </div>
+    );
+  }
 
   return (
     <div className="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 min-h-screen font-display transition-colors">
@@ -53,7 +67,7 @@ export default function CompanySignupPage() {
                   <path d="M24 45.8096C19.6865 45.8096 15.4698 44.5305 11.8832 42.134C8.29667 39.7376 5.50128 36.3314 3.85056 32.3462C2.19985 28.361 1.76794 23.9758 2.60947 19.7452C3.451 15.5145 5.52816 11.6284 8.57829 8.5783C11.6284 5.52817 15.5145 3.45101 19.7452 2.60948C23.9758 1.76795 28.361 2.19986 32.3462 3.85057C36.3314 5.50129 39.7376 8.29668 42.134 11.8833C44.5305 15.4698 45.8096 19.6865 45.8096 24L24 24L24 45.8096Z" fill="currentColor"></path>
                 </svg>
               </div>
-              <h2 className="text-slate-900 dark:text-white text-xl font-bold leading-tight tracking-[-0.015em]">SkillSync</h2>
+              <h2 className="text-slate-900 dark:text-white text-xl font-bold leading-tight tracking-[-0.015em]">JobLyne</h2>
             </Link>
             <div className="flex items-center gap-4">
               <span className="text-slate-500 text-sm hidden md:block">Already have an account?</span>
@@ -63,23 +77,23 @@ export default function CompanySignupPage() {
             </div>
           </header>
 
-          <main className="flex-1 flex flex-col items-center py-10 px-4 transition-all lg:justify-center">
-            <div className="w-full max-w-[1000px] grid grid-cols-1 lg:grid-cols-2 gap-10">
+          <main className="flex-1 flex flex-col items-center py-10 px-4 transition-all lg:justify-center overflow-x-hidden">
+            <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
               
               {/* Left Column (Info) */}
               <div className="flex flex-col gap-6 order-2 lg:order-1 self-center">
                 <div className="flex flex-col gap-2">
-                  <h1 className="text-4xl font-black leading-tight tracking-tight text-slate-900 dark:text-white">
+                  <h1 className="text-3xl sm:text-4xl font-black leading-tight tracking-tight text-slate-900 dark:text-white" style={{ fontSize: 'clamp(2rem, 6vw, 2.5rem)' }}>
                     Register your company
                   </h1>
                   <p className="text-slate-600 dark:text-slate-400 text-lg">
-                    Join the network of professional organizations using SkillSync to find top talent effortlessly.
+                    Join the network of professional organizations using JobLyne to find top talent effortlessly.
                   </p>
                 </div>
                 
                 <div className="bg-white dark:bg-slate-900 rounded-2xl p-8 border border-slate-200 dark:border-slate-800 shadow-xl shadow-slate-200/50 dark:shadow-none space-y-6 relative overflow-hidden mt-6">
                   <div className="relative z-10">
-                    <h4 className="font-bold text-lg mb-4 text-slate-900 dark:text-white">Why SkillSync?</h4>
+                    <h4 className="font-bold text-lg mb-4 text-slate-900 dark:text-white">Why JobLyne?</h4>
                     <ul className="space-y-4">
                       <li className="flex items-start gap-4">
                         <div className="size-8 rounded-full bg-primary/10 text-primary flex items-center justify-center shrink-0">
@@ -229,7 +243,7 @@ export default function CompanySignupPage() {
           
           {/* Footer */}
           <footer className="py-8 border-t border-slate-200 dark:border-slate-800 flex flex-col md:flex-row justify-center items-center gap-4 text-slate-500 text-xs transition-colors bg-white dark:bg-slate-900 px-6 mt-auto">
-            <p>© 2024 SkillSync Inc. All rights reserved.</p>
+            <p>© 2024 JobLyne Inc. All rights reserved.</p>
           </footer>
 
         </div>

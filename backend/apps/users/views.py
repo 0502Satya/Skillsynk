@@ -7,10 +7,14 @@ from django.contrib.auth import authenticate
 from .serializers import (
     UserSignupSerializer, UserResponseSerializer, 
     CompanySignupSerializer, CompanyProfileSerializer,
-    CandidateProfileSerializer, SocialAuthSerializer
+    CandidateProfileSerializer, SocialAuthSerializer,
+    RecruiterSignupSerializer, VerifyOTPSerializer
 )
-from .models import Companies, AdvertiserAccounts, JobSeekers, CustomUser
+from .models import Companies, AdvertiserAccounts, JobSeekers, CustomUser, Recruiters, EmailVerificationOTP
 from .social_auth_utils import verify_google_token, verify_linkedin_token
+from .utils import send_otp_email
+import random
+import string
 
 def get_tokens_for_user(user):
     refresh = RefreshToken.for_user(user)
@@ -29,13 +33,20 @@ class SignupView(APIView):
         serializer = UserSignupSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
-            tokens = get_tokens_for_user(user)
+            
+            # Generate OTP
+            otp_code = ''.join(random.choices(string.digits, k=6))
+            EmailVerificationOTP.objects.create(user=user, otp_code=otp_code)
+            
+            # Send OTP email
+            send_otp_email(user.email, otp_code)
+            
             user_data = UserResponseSerializer(user).data
             
             return Response({
-                'message': 'User registered successfully.',
+                'message': 'User registered. Please verify your email with the OTP sent.',
                 'user': user_data,
-                'tokens': tokens
+                'requires_verification': True
             }, status=status.HTTP_201_CREATED)
             
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -77,13 +88,44 @@ class CompanySignupView(APIView):
         serializer = CompanySignupSerializer(data=request.data)
         if serializer.is_valid():
             user = serializer.save()
-            tokens = get_tokens_for_user(user)
+            
+            # Generate OTP
+            otp_code = ''.join(random.choices(string.digits, k=6))
+            EmailVerificationOTP.objects.create(user=user, otp_code=otp_code)
+            
+            # Send OTP email
+            send_otp_email(user.email, otp_code)
+            
             user_data = UserResponseSerializer(user).data
             
             return Response({
-                'message': 'Company and admin user registered successfully.',
+                'message': 'Company and admin registered. Please verify your email with the OTP sent.',
                 'user': user_data,
-                'tokens': tokens
+                'requires_verification': True
+            }, status=status.HTTP_201_CREATED)
+            
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class RecruiterSignupView(APIView):
+    permission_classes = [AllowAny]
+    def post(self, request, *args, **kwargs):
+        serializer = RecruiterSignupSerializer(data=request.data)
+        if serializer.is_valid():
+            user = serializer.save()
+            
+            # Generate OTP
+            otp_code = ''.join(random.choices(string.digits, k=6))
+            EmailVerificationOTP.objects.create(user=user, otp_code=otp_code)
+            
+            # Send OTP email
+            send_otp_email(user.email, otp_code)
+            
+            user_data = UserResponseSerializer(user).data
+            
+            return Response({
+                'message': 'Recruiter registered. Please verify your email with the OTP sent.',
+                'user': user_data,
+                'requires_verification': True
             }, status=status.HTTP_201_CREATED)
             
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
@@ -169,16 +211,23 @@ class SocialLoginView(APIView):
 
         email = user_info['email']
         
-        # Check if user exists, or create new candidate
         user, created = CustomUser.objects.get_or_create(
             email=email,
             defaults={
                 'account_type': 'CANDIDATE',
                 'is_active': True,
-                # For social login, we might not have a password, but Django requires one.
-                'password': 'SOCIAL_LOGIN_UNUSABLE_PASSWORD'
+                'is_verified': True,
             }
         )
+
+        if created:
+            user.set_unusable_password()
+            user.save()
+        else:
+            # If user exists, ensure they are verified (social verified)
+            if not user.is_verified:
+                user.is_verified = True
+                user.save()
 
         if created:
             # Create JobSeeker profile
@@ -197,3 +246,43 @@ class SocialLoginView(APIView):
             'tokens': tokens,
             'is_new_user': created
         }, status=status.HTTP_200_OK)
+
+class VerifyOTPView(APIView):
+    permission_classes = [AllowAny]
+
+    def post(self, request, *args, **kwargs):
+        serializer = VerifyOTPSerializer(data=request.data)
+        if not serializer.is_valid():
+            return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        email = serializer.validated_data['email']
+        otp_code = serializer.validated_data['otp_code']
+
+        try:
+            user = CustomUser.objects.get(email=email)
+            otp_record = EmailVerificationOTP.objects.filter(user=user, otp_code=otp_code).latest('created_at')
+            
+            # Check for expiry (e.g., 10 minutes)
+            from django.utils import timezone
+            if (timezone.now() - otp_record.created_at).total_seconds() > 600:
+                return Response({'error': 'OTP has expired.'}, status=status.HTTP_400_BAD_REQUEST)
+            
+            # Success
+            user.is_verified = True
+            user.is_active = True
+            user.save()
+            
+            # Cleanup OTPs for this user
+            EmailVerificationOTP.objects.filter(user=user).delete()
+            
+            tokens = get_tokens_for_user(user)
+            user_data = UserResponseSerializer(user).data
+            
+            return Response({
+                'message': 'Email verified successfully.',
+                'user': user_data,
+                'tokens': tokens
+            }, status=status.HTTP_200_OK)
+
+        except (CustomUser.DoesNotExist, EmailVerificationOTP.DoesNotExist):
+            return Response({'error': 'Invalid OTP or email.'}, status=status.HTTP_400_BAD_REQUEST)
